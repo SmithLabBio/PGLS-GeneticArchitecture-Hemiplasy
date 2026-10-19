@@ -22,7 +22,8 @@ We test how phylogenetic generalized least squares (PGLS) performs when traits e
 | `fig1_fpr_grid.R` | False positive rate vs λ |
 | `fig2_tpr_grid.R` | True positive rate (power) vs λ |
 | `fig3_rf_qc.R` | Gene-tree/species-tree discordance (Robinson–Foulds) vs λ |
-| `fig_vcv.R` | Heatmaps of the covariance matrices used for fitting |
+| `fig4_vcv.R` | Heatmaps of the covariance matrices used for fitting |
+| `fig5_sigmacorrelation.R` | Plots sigma and p-values across tree heights |
 | `results/` | Summary tables (rejection rates per combination and method) |
 | `figures/` | Figures from the paper |
 | `versions.txt` | Exact R package versions used |
@@ -72,7 +73,8 @@ This writes `results_combined/` and lists any missing combinations in `missing_c
 Rscript fig1_fpr_grid.R
 Rscript fig2_tpr_grid.R
 Rscript fig3_rf_qc.R
-Rscript fig_vcv.R
+Rscript fig4_vcv.R
+Rscript fig5_sigmacorrelation.R
 ```
 
 ### Reproducibility
