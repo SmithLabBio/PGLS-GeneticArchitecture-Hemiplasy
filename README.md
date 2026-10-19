@@ -13,7 +13,9 @@ We test how phylogenetic generalized least squares (PGLS) performs when traits e
 |---|---|
 | `pgls_functions.R` | Simulation and model fitting. Main entry point: `one_rep()` |
 | `run_task.R` | Runs 1,000 replicates of one parameter combination (one SLURM array task) |
+| `run_task.R` | Runs 1,000 replicates of one parameter combination (one SLURM array task) under varying levels of Pagel's lambda. |
 | `submit_block.sh` | Submits a range of combinations as SLURM array jobs |
+| `submit_block_weak.sh` | Submits a range of combinations as SLURM array jobs for varying levels of Pagel's lambda. |
 | `combine_results.R` | Checks completeness and combines per-combination output |
 | `plot_helpers.R` | Shared data loading, colors and theme for figures |
 | `fig1_fpr_grid.R` | False positive rate vs λ |
@@ -47,6 +49,12 @@ Each task writes `sim_output/<combination>.csv`, plus the covariance matrices fo
 
 ```bash
 Rscript run_task.R 1
+```
+
+For varying level's of Pagel's lambda:
+
+```bash
+./submit_block_weak.sh 1 210
 ```
 
 **2. Combine and check:**
@@ -87,6 +95,7 @@ one_rep(Nspec, Lambda, X_arch, Y_arch, Beta, return_matrices = TRUE)
 | `Y_arch` | `same`, 1, 2, 5, 10, 100 | Loci underlying trait Y. `same` means Y uses X's gene trees |
 | `Beta` | 0, 0.25, 0.5, 0.75, 1 | True slope of Y on X |
 | `Nspec` | 10, 100 | Number of extant species |
+| `Pagel's lambda` | 1 (0.5 in weak run) | Strength of phylogenetic signal in trait X. |
 
 ## Simulation and fitting
 
@@ -122,6 +131,8 @@ One row per replicate:
 | `species_height` | Species tree height |
 | `X_height`, `Y_height` | Mean gene-tree height for X and Y |
 | `random_arch` | Number of loci drawn for the `random` method |
+| `pagel_lambda_x` | Pagel's lambda for weak run |
+
 
 `<method>` is one of `species`, `x`, `y`, `random`, `random500`, `unrelated`.
 
