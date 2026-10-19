@@ -16,6 +16,7 @@ We test how phylogenetic generalized least squares (PGLS) performs when traits e
 | `run_task.R` | Runs 1,000 replicates of one parameter combination (one SLURM array task) under varying levels of Pagel's lambda. |
 | `submit_block.sh` | Submits a range of combinations as SLURM array jobs |
 | `submit_block_weak.sh` | Submits a range of combinations as SLURM array jobs for varying levels of Pagel's lambda. |
+| `summarize_results.R` | Summarizes results into tables for repository |
 | `combine_results.R` | Checks completeness and combines per-combination output |
 | `plot_helpers.R` | Shared data loading, colors and theme for figures |
 | `fig1_fpr_grid.R` | False positive rate vs λ |

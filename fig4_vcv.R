@@ -81,7 +81,7 @@ plot_vcv <- function(Lambda, X_arch, Y_arch, Beta, Nspec, rep = 1, save = TRUE) 
           panel.grid = element_blank(), legend.position = "right")
 
   if (save) {
-    fname <- sprintf("figures/fig5_vcv_Lambda%s_X%s_Y%s_Beta%s_N%s_rep%s.png",
+    fname <- sprintf("figures/fig4_vcv_Lambda%s_X%s_Y%s_Beta%s_N%s_rep%s.png",
                      fmt(Lambda), X_arch, Y_arch, fmt(Beta), Nspec, rep)
     ggsave(fname, g, width = 12, height = 8, dpi = 300)
     cat("Saved", fname, "\n")
