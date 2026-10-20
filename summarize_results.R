@@ -5,8 +5,8 @@
 #
 #   results/summary_by_method.csv
 #     One row per parameter combination x fitting method:
-#     rejection rate at alpha = 0.05 (FPR when Beta = 0, power otherwise)
-#     with its  SE, and the mean, bias, SD and RMSE of beta-hat,
+#     rejection rate at alpha = 0.05 (FPR when Beta = 0, power otherwise),
+#     and the mean, bias, SD and RMSE of beta-hat,
 #     mean SE, 95% CI coverage and mean sigma.
 #
 #   results/summary_trees.csv
@@ -57,7 +57,7 @@ by_method <- long[, {
 
 # ---- per combination: trees -----------------------------------------------
 tree_cols <- intersect(c("RF_X", "RF_Y", "RF_Random", "RF_Random500", "RF_Unrelated",
-                         "species_height", "X_height", "Y_height", "random_arch"), names(d))
+                         "species_height", "height_x", "height_y", "random_arch"), names(d))
 trees <- d[, c(list(n = .N), lapply(.SD, function(v) mean(v, na.rm = TRUE))),
            by = params, .SDcols = tree_cols]
 setnames(trees, tree_cols, paste0("mean_", tree_cols))
