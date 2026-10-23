@@ -87,6 +87,8 @@ Rscript fig2_tpr_grid.R
 Rscript fig3_rf_qc.R
 Rscript fig4_vcv.R
 Rscript fig5_sigmacorrelation.R
+Rscript fig6_weakcompare.R
+Rscript fig7_overlap.R
 ```
 
 ### Reproducibility
