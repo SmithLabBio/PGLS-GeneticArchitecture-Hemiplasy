@@ -10,7 +10,7 @@ library(TreeSim)
 # one_rep(): simulate one dataset and fit every method.
 # Returns a 1-row data.frame of results. If return_matrices = TRUE, returns
 # list(results = <that data.frame>, vcvs = <VCVs used>) instead.
-one_rep <- function(Nspec, Lambda, X_arch, Y_arch, Beta, extinction="half", return_matrices=FALSE, pagel_lambda_x = 1) {
+one_rep <- function(Nspec, Lambda, X_arch, Y_arch, Beta, extinction="half", return_matrices=FALSE, pagel_lambda_x = 1, n_shared = NULL) {
   
   if (extinction == "half"){
     Mu <- Lambda / 2
@@ -25,7 +25,10 @@ one_rep <- function(Nspec, Lambda, X_arch, Y_arch, Beta, extinction="half", retu
   SpeciesTree[[1]] <- drop_extinct(SpeciesTree[[1]], Nspec)
 
   GenesX <- gene_trees(X_arch, SpeciesTree)
-  if(Y_arch == "same"){
+  if (!is.null(n_shared)) {
+    if (as.character(Y_arch) != as.character(X_arch)) stop("n_shared is only supported when X_arch and Y_arch are the same")
+    GenesY <- overlap_gene_trees(GenesX, n_shared, SpeciesTree)
+  }else if(Y_arch == "same"){
     GenesY <- GenesX
   }else{
     GenesY <- gene_trees(Y_arch, SpeciesTree)
@@ -87,6 +90,7 @@ one_rep <- function(Nspec, Lambda, X_arch, Y_arch, Beta, extinction="half", retu
                         random500_beta = pgls_random500$beta, random500_se = pgls_random500$se, random500_t = pgls_random500$t, random500_p = pgls_random500$p, random500_sigma = pgls_random500$sigma,
                         unrelated_beta = pgls_unrelated$beta, unrelated_se = pgls_unrelated$se, unrelated_t = pgls_unrelated$t, unrelated_p = pgls_unrelated$p,  unrelated_sigma = pgls_unrelated$sigma,
                         random_arch = GenesRandom$architecture, height_x = X_height, height_y = Y_height)
+  if (!is.null(n_shared)) results$n_shared <- n_shared
   if (!return_matrices) return(results)
  
   # The VCV behind each fit (averaged over gene trees where there are several).
@@ -175,4 +179,22 @@ drop_extinct <- function(tr, n) {
     stop("Species tree has ", Ntip(tr), " tips (wanted ", n, ") or is not ultrametric")
   }
   tr
+}
+
+# Y's gene trees for the partial-overlap runs: the first n_shared of X's
+# gene trees plus (K - n_shared) newly simulated ones, K = number of X's
+# trees. X's trees are exchangeable, so which ones are shared is arbitrary.
+# Returns the same structure as gene_trees().
+overlap_gene_trees <- function(GenesX, n_shared, SpeciesTree) {
+  K <- length(GenesX$trees)
+  if (n_shared < 0 || n_shared > K || n_shared != round(n_shared)) {
+    stop("n_shared must be a whole number from 0 to ", K)
+  }
+  shared <- GenesX$trees[seq_len(n_shared)]
+  new    <- if (n_shared < K) gene_trees(K - n_shared, SpeciesTree)$trees else list()
+  trees  <- c(shared, new)
+  vcv    <- lapply(trees, function(x) ape::vcv(x$tree))
+  rfs    <- sapply(trees, function(x) RF.dist(SpeciesTree[[1]], x$tree, normalize = TRUE))
+  list(vcv = Reduce('+', vcv) / length(vcv), rf_mean = mean(rfs),
+       trees = trees, architecture = K)
 }

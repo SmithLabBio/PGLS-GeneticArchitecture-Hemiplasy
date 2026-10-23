@@ -13,17 +13,21 @@ We test how phylogenetic generalized least squares (PGLS) performs when traits e
 |---|---|
 | `pgls_functions.R` | Simulation and model fitting. Main entry point: `one_rep()` |
 | `run_task.R` | Runs 1,000 replicates of one parameter combination (one SLURM array task) |
-| `run_task.R` | Runs 1,000 replicates of one parameter combination (one SLURM array task) under varying levels of Pagel's lambda. |
+| `run_task_weak.R` | Runs 1,000 replicates of one parameter combination (one SLURM array task) under varying levels of Pagel's lambda. |
+| `run_task_overlap.R` | Runs 1,000 replicates of one parameter combination (one SLURM array task) under varying levels of architecture overlap. |
 | `submit_block.sh` | Submits a range of combinations as SLURM array jobs |
 | `submit_block_weak.sh` | Submits a range of combinations as SLURM array jobs for varying levels of Pagel's lambda. |
-| `summarize_results.R` | Summarizes results into tables for repository |
+| `submit_block_overlap.sh` | Submits a range of combinations as SLURM array jobs for varying levels of architecture overlap. |
 | `combine_results.R` | Checks completeness and combines per-combination output |
+| `summarize_results.R` | Summarizes results into tables for repository |
 | `plot_helpers.R` | Shared data loading, colors and theme for figures |
 | `fig1_fpr_grid.R` | False positive rate vs λ |
 | `fig2_tpr_grid.R` | True positive rate (power) vs λ |
 | `fig3_rf_qc.R` | Gene-tree/species-tree discordance (Robinson–Foulds) vs λ |
 | `fig4_vcv.R` | Heatmaps of the covariance matrices used for fitting |
 | `fig5_sigmacorrelation.R` | Plots sigma and p-values across tree heights |
+| `fig6_weakcompare.R` | Plots for runs with weaker phylogenetic signal in X |
+| `fig7_overlap.R` | Plots for runs with different amounts of overlap in X and Y |
 | `results/` | Summary tables (rejection rates per combination and method) |
 | `figures/` | Figures from the paper |
 | `versions.txt` | Exact R package versions used |
@@ -59,13 +63,21 @@ For varying level's of Pagel's lambda:
 ./submit_block_weak.sh 1 210
 ```
 
+For varying amounts of overlap:
+
+```bash
+./submit_block_overlap.sh 1 140
+```
+
 **2. Combine and check:**
 
 ```bash
-Rscript combine_results.R
+Rscript combine_results.R main
+Rscript combine_results.R weak
+Rscript combine_results.R overlap
 ```
 
-This writes `results_combined/` and lists any missing combinations in `missing_combos.csv`.
+This writes `results_combined/`, `results_combined_weak/`, and `results_combined_overlap/` and lists any missing combinations in `missing_combos_<run>.csv`.
 
 **3. Figures:**
 
@@ -99,6 +111,7 @@ one_rep(Nspec, Lambda, X_arch, Y_arch, Beta, return_matrices = TRUE)
 | `Beta` | 0, 0.25, 0.5, 0.75, 1 | True slope of Y on X |
 | `Nspec` | 10, 100 | Number of extant species |
 | `Pagel's lambda` | 1 (0.5 in weak run) | Strength of phylogenetic signal in trait X. |
+| `overlap` | NULL (varies in overlap run) | Amount of overlap in X and Ys genes. None in the default. |
 
 ## Simulation and fitting
 
@@ -135,6 +148,7 @@ One row per replicate:
 | `X_height`, `Y_height` | Mean gene-tree height for X and Y |
 | `random_arch` | Number of loci drawn for the `random` method |
 | `pagel_lambda_x` | Pagel's lambda for weak run |
+| `n_shared` | Number of genes shared across X and Y's architectures in the overlap run. |
 
 
 `<method>` is one of `species`, `x`, `y`, `random`, `random500`, `unrelated`.

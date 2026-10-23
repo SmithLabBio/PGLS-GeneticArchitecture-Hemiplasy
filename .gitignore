@@ -9,3 +9,7 @@ sim_output/
 sim_output_weak/
 Rplots.pdf
 results_combined_weak/
+results_combined_overlap/
+logs_overlap/
+chunks_overlap/
+sim_output_overlap/

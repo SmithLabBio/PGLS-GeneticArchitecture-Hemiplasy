@@ -20,8 +20,12 @@ open_results <- function(x_arch = NULL, nspec = NULL, path = "results_combined")
   if (!is.null(x_arch)) keep <- keep & grepl(paste0("_X(", paste(x_arch, collapse = "|"), ")\\.csv\\.gz$"), files)
   if (!is.null(nspec))  keep <- keep & grepl(paste0("^Nspec(", paste(nspec, collapse = "|"), ")_"), basename(files))
   if (!any(keep)) stop("No results files in ", path, " for x_arch = ", toString(x_arch), ", nspec = ", toString(nspec))
-  # Y_arch as text in every file (see combine_results.R)
-  rbindlist(lapply(files[keep], fread, colClasses = list(character = "Y_arch")))
+  # Read Y_arch as text where it exists (see combine_results.R); the overlap
+  # run has no Y_arch column.
+  read_one <- function(f) {
+    if ("Y_arch" %in% names(fread(f, nrows = 0))) fread(f, colClasses = list(character = "Y_arch")) else fread(f)
+  }
+  rbindlist(lapply(files[keep], read_one))
 }
 
 # --- fitting scenarios: display name -> p-value column ---
