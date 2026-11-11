@@ -65,7 +65,7 @@ plot_weak <- function(d, beta_value, save = TRUE) {
                         color = scenario, linetype = pagel,
                         group = interaction(scenario, pagel))) +
     { if (is_fpr) geom_hline(yintercept = 0.05, linetype = "dotted", color = "grey50") } +
-    geom_line(linewidth = 0.7) +
+    geom_line(linewidth = 1) +
     geom_point(size = 1) +
     scale_x_log10() +
     scale_y_continuous(limits = c(0, 1)) +

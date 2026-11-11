@@ -35,7 +35,7 @@ plot_tpr_grid <- function(beta_value, x_arch_value, save = TRUE) {
   }
 
   g <- ggplot(summ, aes(x = Lambda, y = power, color = scenario, linetype = scenario)) +
-    geom_line(linewidth = 0.7) +
+    geom_line(linewidth = 1) +
     geom_point(size = 1) +
     scale_x_log10() +
     scale_y_continuous(limits = c(0, 1)) +

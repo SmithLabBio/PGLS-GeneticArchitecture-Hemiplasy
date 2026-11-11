@@ -42,14 +42,14 @@ scenario_p_cols <- c(
 # --- consistent scenario colors/linetypes across all figures ---
 scenario_colors <- setNames(
   c("#000000",   # black
-    "#D55E00",   # vermillion
+    "#009E73",   # vermillion
     "#0072B2",   # blue
     "#999999",   # grey
-    "#009E73",   # bluish green
+    "#F00000",   # bluish green
     "#E69F00"),  # orange
   names(scenario_p_cols))
 scenario_linetypes <- setNames(
-  c("solid", "solid", "solid", "dashed", "dotted", "solid"),
+  c("solid", "solid", "solid", "dashed", "dashed", "solid"),
   names(scenario_p_cols))
 
 # --- Y_arch display order: matched first, then increasing mismatch ---

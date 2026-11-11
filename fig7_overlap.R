@@ -44,7 +44,7 @@ plot_overlap <- function(beta_value, save = TRUE) {
 
   g <- ggplot(summ, aes(x = Lambda, y = rejection_rate, color = scenario, linetype = scenario)) +
     { if (is_fpr) geom_hline(yintercept = 0.05, linetype = "dotted", color = "grey50") } +
-    geom_line(linewidth = 0.7) +
+    geom_line(linewidth = 1) +
     geom_point(size = 1) +
     scale_x_log10() +
     scale_y_continuous(limits = c(0, 1)) +
